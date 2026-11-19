@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: poketra-api
+
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  flyway:
+    enabled: false
+
+app:
+  google:
+    client-id: test-client-id
+  jwt:
+    secret: test-secret-key-that-is-at-least-32-characters-long
+    expiration-minutes: 60
+

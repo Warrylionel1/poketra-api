@@ -39,7 +39,7 @@ public class GoogleTokenVerifier {
         this.decoder = nimbusDecoder;
     }
 
-    public void verify(String idToken) throws InvalidGoogleTokenException {
+    public GoogleUserInfo verify(String idToken) throws InvalidGoogleTokenException {
         Jwt jwt;
         try {
             jwt = decoder.decode(idToken);
@@ -58,7 +58,7 @@ public class GoogleTokenVerifier {
             throw new InvalidGoogleTokenException("Google token has no email");
         }
 
-        new GoogleUserInfo(
+        return new GoogleUserInfo(
                 jwt.getSubject(),
                 email,
                 resolveFirstName(jwt, email),
