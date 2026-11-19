@@ -49,16 +49,18 @@ public class User {
     private String pictureUrl;
 
 
-    @Size(max = 3)
     @NotNull
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
     @ColumnDefault("'MGA'")
     @Column(name = "currency", nullable = false, length = 3)
-    private String currency;
+    private Currency currency = Currency.MGA;
 
     @NotNull
+    @Builder.Default
     @ColumnDefault("now()")
     @Column(name = "created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 
     public String getFullName() {
         return lastName == null || lastName.isBlank() ? firstName : firstName + " " + lastName;
