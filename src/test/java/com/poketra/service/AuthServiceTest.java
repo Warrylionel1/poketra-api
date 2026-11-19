@@ -2,6 +2,7 @@ package com.poketra.service;
 
 import com.poketra.dto.response.AuthResponse;
 import com.poketra.exception.InvalidGoogleTokenException;
+import com.poketra.model.Currency;
 import com.poketra.model.User;
 import com.poketra.repository.UserRepository;
 import com.poketra.security.GoogleTokenVerifier;
@@ -35,13 +36,18 @@ class AuthServiceTest {
         Mockito.when(googleTokenVerifier.verify("google-token")).thenReturn(info);
         Mockito.when(userRepository.findByGoogleId("g-123")).thenReturn(Optional.empty());
         Mockito.when(userRepository.save(Mockito.any(User.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+                .thenAnswer(invocation -> {
+                    User u = invocation.getArgument(0);
+                    u.setId(java.util.UUID.randomUUID());
+                    return u;
+                });
 
         AuthResponse response = authService.authenticateWithGoogle("google-token");
 
         Assertions.assertEquals("jwt-token", response.token());
         Assertions.assertEquals("warry@example.com", response.user().email());
-        Assertions.assertEquals("MGA", response.user().currency());
+        Assertions.assertEquals(Currency.MGA, response.user().currency());
+        Assertions.assertNotNull(response.user().id());
         Mockito.verify(userRepository).save(Mockito.any(User.class));
     }
 
@@ -49,9 +55,11 @@ class AuthServiceTest {
     void reusesExistingUserOnNextLogin() throws InvalidGoogleTokenException {
         GoogleUserInfo info = new GoogleUserInfo("g-123", "warry@example.com", "Warry", "Lionel", null);
         User existing = User.builder()
+                .id(java.util.UUID.randomUUID())
                 .googleId("g-123")
                 .email("warry@example.com")
                 .firstName("Warry")
+                .currency(Currency.MGA)
                 .build();
         Mockito.when(googleTokenVerifier.verify("google-token")).thenReturn(info);
         Mockito.when(userRepository.findByGoogleId("g-123")).thenReturn(Optional.of(existing));
