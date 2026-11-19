@@ -6,6 +6,7 @@ import com.poketra.exception.InvalidJwtException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 class JwtServiceTest {
@@ -13,7 +14,8 @@ class JwtServiceTest {
     private JwtService buildService(String secret) {
         AppProperties properties = new AppProperties(
                 new AppProperties.Google("test-client-id"),
-                new AppProperties.Jwt(secret, 60)
+                new AppProperties.Jwt(secret, 60),
+                new AppProperties.Cors(List.of("http://localhost:3000"))
         );
         JwtConfig config = new JwtConfig();
         return new JwtService(config.jwtEncoder(properties), config.jwtDecoder(properties), properties);
