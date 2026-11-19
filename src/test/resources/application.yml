@@ -22,4 +22,5 @@ app:
   jwt:
     secret: test-secret-key-that-is-at-least-32-characters-long
     expiration-minutes: 60
-
+  cors:
+    allowed-origins: http://localhost:3000
