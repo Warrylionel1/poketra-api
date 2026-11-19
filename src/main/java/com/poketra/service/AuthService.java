@@ -4,6 +4,7 @@ package com.poketra.service;
 import com.poketra.dto.response.AuthResponse;
 import com.poketra.dto.response.UserResponse;
 import com.poketra.exception.InvalidGoogleTokenException;
+import com.poketra.model.Currency;
 import com.poketra.model.User;
 import com.poketra.repository.UserRepository;
 import com.poketra.security.GoogleTokenVerifier;
@@ -34,7 +35,7 @@ public class AuthService {
     }
 
     private User createUser(GoogleUserInfo googleUser) {
-        User user = User.builder().googleId(googleUser.googleId()).email(googleUser.email()).firstName(googleUser.firstName()).lastName(googleUser.lastName()).pictureUrl(googleUser.pictureUrl()).currency("MGA").createdAt(java.time.OffsetDateTime.now()).build();
+        User user = User.builder().googleId(googleUser.googleId()).email(googleUser.email()).firstName(googleUser.firstName()).lastName(googleUser.lastName()).pictureUrl(googleUser.pictureUrl()).currency(Currency.MGA).createdAt(java.time.OffsetDateTime.now()).build();
 
         User saved = userRepository.save(user);
         log.info("New user registered: {}", saved.getId());
